@@ -22,6 +22,7 @@ enum TokenType {
   OP8_ADD,         // + - ~ | operators
   OP9_MUL,         // * / % \ operators
   OP10_POW,        // $ ^ operators
+  CASE_NEWLINE,    // line break before a case expression's next branch
 };
 
 typedef struct {
@@ -65,6 +66,26 @@ static uint32_t consume_indent(TSLexer *lexer) {
     advance(lexer, true);
   }
   return indent;
+}
+
+static bool is_ident_char(int32_t c) {
+  return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') ||
+         (c >= '0' && c <= '9') || c == '_' || c >= 0x80;
+}
+
+// Whether the lookahead starts the keyword `of`, `elif` or `else` (a whole
+// word). Advances past what it reads, so call it only after mark_end.
+static bool at_case_branch(TSLexer *lexer) {
+  char word[5];
+  int len = 0;
+  while (is_ident_char(lexer->lookahead)) {
+    if (len == 4) return false;
+    word[len++] = (char)lexer->lookahead;
+    advance(lexer, false);
+  }
+  word[len] = '\0';
+  return strcmp(word, "of") == 0 || strcmp(word, "elif") == 0 ||
+         strcmp(word, "else") == 0;
 }
 
 static bool scan_line_comment(TSLexer *lexer) {
@@ -369,6 +390,16 @@ bool tree_sitter_nim_external_scanner_scan(void *payload, TSLexer *lexer, const 
 
     uint32_t indent = consume_indent(lexer);
     int32_t next = lexer->lookahead;
+
+    // A case expression's next branch on its own line, at or past the
+    // enclosing block's column: the case goes on, with no INDENT or DEDENT.
+    // (INDENT is never valid with CASE_NEWLINE outside error recovery.)
+    if (valid[CASE_NEWLINE] && !valid[INDENT] &&
+        indent >= s->indents[s->indent_len - 1] && at_case_branch(lexer)) {
+      lexer->result_symbol = CASE_NEWLINE;
+      return true;
+    }
+
     bool hard_newline = valid[NEWLINE];
 
     if (hard_newline) {

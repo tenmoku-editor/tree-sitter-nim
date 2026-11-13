@@ -95,6 +95,9 @@ module.exports = grammar({
     $._op8_add, // + - ~ | multi-char operators
     $._op9_mul, // * / % \ multi-char operators
     $._op10_pow, // $ ^ multi-char operators
+    // A line break before a case expression's next of/elif/else branch, at or
+    // past the enclosing statement's column (no INDENT/DEDENT bookkeeping)
+    $._case_newline,
   ],
 
   extras: ($) => [$._ws, $._soft_newline, $.comment],
@@ -1452,13 +1455,19 @@ module.exports = grammar({
         seq(
           "case",
           field("expression", $.expression),
-          repeat1($.case_expr_branch),
+          $.case_expr_branch,
+          // Later branches may start their own lines (`let y = case x` with
+          // the branches below it at the statement's column or indented)
+          repeat(
+            choice($.case_expr_branch, seq($._case_newline, $.case_expr_branch)),
+          ),
         ),
       ),
 
     case_expr_branch: ($) =>
       choice(
         seq("of", $.expression_list, ":", $._expr_body),
+        seq("elif", field("condition", $.expression), ":", $._expr_body),
         seq("else", ":", $._expr_body),
       ),
 
