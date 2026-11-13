@@ -371,8 +371,9 @@ module.exports = grammar({
     finally_branch: ($) => seq("finally", $._colon_suite),
 
     // case statement with proper ordering: of branches first, then optional else at end
-    // Nim's structure: case expr: (of expr: suite)+ (else: suite)?
-    // At least one of branch is required
+    // Nim's structure: case expr: (of expr: suite)+ (elif expr: suite)* (else: suite)?
+    // At least one of branch is required. The branches may sit at the same
+    // column as `case` (the manual's and NEP-1's style) or be indented one level.
     case_stmt: ($) =>
       seq(
         "case",
@@ -380,16 +381,27 @@ module.exports = grammar({
         optional(":"),
         $._newline,
         repeat($._newline),
-        $._indent,
-        // Require at least one of_branch
-        repeat($._newline),
-        $.of_branch,
-        repeat(choice($.of_branch, $._newline)),
-        optional(seq($.else_branch, repeat($._newline))),
-        $._dedent,
+        choice(
+          seq($._indent, repeat($._newline), $._case_branches, $._dedent),
+          // With no DEDENT to close it, the case ends at the first line that
+          // isn't a branch; prec.right keeps blank lines between branches in it
+          prec.right($._case_branches),
+        ),
+      ),
+
+    _case_branches: ($) =>
+      prec.right(
+        seq(
+          // Require at least one of_branch
+          $.of_branch,
+          repeat(choice($.of_branch, $.elif_branch, $._newline)),
+          optional(seq($.else_branch, repeat($._newline))),
+        ),
       ),
 
     of_branch: ($) => seq("of", $.expression_list, $._colon_suite),
+    elif_branch: ($) =>
+      seq("elif", field("condition", $.expression), $._colon_suite),
     else_branch: ($) => seq("else", $._colon_suite),
 
     block_stmt: ($) =>

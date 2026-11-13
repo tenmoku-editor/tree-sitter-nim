@@ -1,0 +1,506 @@
+==================
+case of at the same column as case
+==================
+
+proc f(x: int) =
+  case x
+  of 1: echo 1
+  else: discard
+
+---
+
+(source_file
+  (compound_stmt
+    (routine_definition
+      (routine_kind)
+      (exported_symbol
+        (symbol
+          (identifier)))
+      (param_list
+        (param_decl
+          (symbol
+            (identifier))
+          (type_expr
+            (qualified_identifier
+              (symbol
+                (identifier))))))
+      (compound_stmt
+        (case_stmt
+          (expression
+            (infix_expression
+              (assign_expr
+                (op2_expr
+                  (or_expr
+                    (and_expr
+                      (cmp_expr
+                        (range_expr
+                          (amp_expr
+                            (add_expr
+                              (mul_expr
+                                (pow_expr
+                                  (prefix_expr
+                                    (postfix_expr
+                                      (postfixable_primary
+                                        (symbol
+                                          (identifier)))))))))))))))))
+          (of_branch
+            (expression_list
+              (expression
+                (infix_expression
+                  (assign_expr
+                    (op2_expr
+                      (or_expr
+                        (and_expr
+                          (cmp_expr
+                            (range_expr
+                              (amp_expr
+                                (add_expr
+                                  (mul_expr
+                                    (pow_expr
+                                      (prefix_expr
+                                        (postfix_expr
+                                          (postfixable_primary
+                                            (literal
+                                              (integer_literal))))))))))))))))))
+            (inline_stmt_list
+              (simple_stmt
+                (expr_stmt
+                  (expression
+                    (command_expr
+                      (postfix_expr
+                        (postfixable_primary
+                          (symbol
+                            (identifier))))
+                      (command_first_arg
+                        (infix_expression
+                          (assign_expr
+                            (op2_expr
+                              (or_expr
+                                (and_expr
+                                  (cmp_expr
+                                    (range_expr
+                                      (amp_expr
+                                        (add_expr
+                                          (mul_expr
+                                            (pow_expr
+                                              (prefix_expr
+                                                (postfix_expr
+                                                  (postfixable_primary
+                                                    (literal
+                                                      (integer_literal)))))))))))))))))))))))
+          (else_branch
+            (inline_stmt_list
+              (simple_stmt
+                (discard_stmt)))))))))
+
+==================
+case of indented past case
+==================
+
+proc f(x: int) =
+  case x
+    of 1: echo 1
+    else: discard
+
+---
+
+(source_file
+  (compound_stmt
+    (routine_definition
+      (routine_kind)
+      (exported_symbol
+        (symbol
+          (identifier)))
+      (param_list
+        (param_decl
+          (symbol
+            (identifier))
+          (type_expr
+            (qualified_identifier
+              (symbol
+                (identifier))))))
+      (compound_stmt
+        (case_stmt
+          (expression
+            (infix_expression
+              (assign_expr
+                (op2_expr
+                  (or_expr
+                    (and_expr
+                      (cmp_expr
+                        (range_expr
+                          (amp_expr
+                            (add_expr
+                              (mul_expr
+                                (pow_expr
+                                  (prefix_expr
+                                    (postfix_expr
+                                      (postfixable_primary
+                                        (symbol
+                                          (identifier)))))))))))))))))
+          (of_branch
+            (expression_list
+              (expression
+                (infix_expression
+                  (assign_expr
+                    (op2_expr
+                      (or_expr
+                        (and_expr
+                          (cmp_expr
+                            (range_expr
+                              (amp_expr
+                                (add_expr
+                                  (mul_expr
+                                    (pow_expr
+                                      (prefix_expr
+                                        (postfix_expr
+                                          (postfixable_primary
+                                            (literal
+                                              (integer_literal))))))))))))))))))
+            (inline_stmt_list
+              (simple_stmt
+                (expr_stmt
+                  (expression
+                    (command_expr
+                      (postfix_expr
+                        (postfixable_primary
+                          (symbol
+                            (identifier))))
+                      (command_first_arg
+                        (infix_expression
+                          (assign_expr
+                            (op2_expr
+                              (or_expr
+                                (and_expr
+                                  (cmp_expr
+                                    (range_expr
+                                      (amp_expr
+                                        (add_expr
+                                          (mul_expr
+                                            (pow_expr
+                                              (prefix_expr
+                                                (postfix_expr
+                                                  (postfixable_primary
+                                                    (literal
+                                                      (integer_literal)))))))))))))))))))))))
+          (else_branch
+            (inline_stmt_list
+              (simple_stmt
+                (discard_stmt)))))))))
+
+==================
+top-level case with elif at the same column
+==================
+
+case x
+of 1, 2:
+  echo 1
+elif x > 5: echo 5
+else: discard
+echo "after"
+
+---
+
+(source_file
+  (compound_stmt
+    (case_stmt
+      (expression
+        (infix_expression
+          (assign_expr
+            (op2_expr
+              (or_expr
+                (and_expr
+                  (cmp_expr
+                    (range_expr
+                      (amp_expr
+                        (add_expr
+                          (mul_expr
+                            (pow_expr
+                              (prefix_expr
+                                (postfix_expr
+                                  (postfixable_primary
+                                    (symbol
+                                      (identifier)))))))))))))))))
+      (of_branch
+        (expression_list
+          (expression
+            (infix_expression
+              (assign_expr
+                (op2_expr
+                  (or_expr
+                    (and_expr
+                      (cmp_expr
+                        (range_expr
+                          (amp_expr
+                            (add_expr
+                              (mul_expr
+                                (pow_expr
+                                  (prefix_expr
+                                    (postfix_expr
+                                      (postfixable_primary
+                                        (literal
+                                          (integer_literal)))))))))))))))))
+          (expression
+            (infix_expression
+              (assign_expr
+                (op2_expr
+                  (or_expr
+                    (and_expr
+                      (cmp_expr
+                        (range_expr
+                          (amp_expr
+                            (add_expr
+                              (mul_expr
+                                (pow_expr
+                                  (prefix_expr
+                                    (postfix_expr
+                                      (postfixable_primary
+                                        (literal
+                                          (integer_literal))))))))))))))))))
+        (simple_stmt_line
+          (simple_stmt
+            (expr_stmt
+              (expression
+                (command_expr
+                  (postfix_expr
+                    (postfixable_primary
+                      (symbol
+                        (identifier))))
+                  (command_first_arg
+                    (infix_expression
+                      (assign_expr
+                        (op2_expr
+                          (or_expr
+                            (and_expr
+                              (cmp_expr
+                                (range_expr
+                                  (amp_expr
+                                    (add_expr
+                                      (mul_expr
+                                        (pow_expr
+                                          (prefix_expr
+                                            (postfix_expr
+                                              (postfixable_primary
+                                                (literal
+                                                  (integer_literal)))))))))))))))))))))))
+      (elif_branch
+        (expression
+          (infix_expression
+            (assign_expr
+              (op2_expr
+                (or_expr
+                  (and_expr
+                    (cmp_expr
+                      (range_expr
+                        (amp_expr
+                          (add_expr
+                            (mul_expr
+                              (pow_expr
+                                (prefix_expr
+                                  (postfix_expr
+                                    (postfixable_primary
+                                      (symbol
+                                        (identifier))))))))))
+                      (cmp_operator)
+                      (range_expr
+                        (amp_expr
+                          (add_expr
+                            (mul_expr
+                              (pow_expr
+                                (prefix_expr
+                                  (postfix_expr
+                                    (postfixable_primary
+                                      (literal
+                                        (integer_literal)))))))))))))))))
+        (inline_stmt_list
+          (simple_stmt
+            (expr_stmt
+              (expression
+                (command_expr
+                  (postfix_expr
+                    (postfixable_primary
+                      (symbol
+                        (identifier))))
+                  (command_first_arg
+                    (infix_expression
+                      (assign_expr
+                        (op2_expr
+                          (or_expr
+                            (and_expr
+                              (cmp_expr
+                                (range_expr
+                                  (amp_expr
+                                    (add_expr
+                                      (mul_expr
+                                        (pow_expr
+                                          (prefix_expr
+                                            (postfix_expr
+                                              (postfixable_primary
+                                                (literal
+                                                  (integer_literal)))))))))))))))))))))))
+      (else_branch
+        (inline_stmt_list
+          (simple_stmt
+            (discard_stmt))))))
+  (simple_stmt_line
+    (simple_stmt
+      (expr_stmt
+        (expression
+          (command_expr
+            (postfix_expr
+              (postfixable_primary
+                (symbol
+                  (identifier))))
+            (command_first_arg
+              (infix_expression
+                (assign_expr
+                  (op2_expr
+                    (or_expr
+                      (and_expr
+                        (cmp_expr
+                          (range_expr
+                            (amp_expr
+                              (add_expr
+                                (mul_expr
+                                  (pow_expr
+                                    (prefix_expr
+                                      (postfix_expr
+                                        (postfixable_primary
+                                          (literal
+                                            (string_literal)))))))))))))))))))))))
+
+==================
+case elif indented past case
+==================
+
+case x:
+  of 1: echo 1
+  elif x > 5: echo 5
+  else: discard
+
+---
+
+(source_file
+  (compound_stmt
+    (case_stmt
+      (expression
+        (infix_expression
+          (assign_expr
+            (op2_expr
+              (or_expr
+                (and_expr
+                  (cmp_expr
+                    (range_expr
+                      (amp_expr
+                        (add_expr
+                          (mul_expr
+                            (pow_expr
+                              (prefix_expr
+                                (postfix_expr
+                                  (postfixable_primary
+                                    (symbol
+                                      (identifier)))))))))))))))))
+      (of_branch
+        (expression_list
+          (expression
+            (infix_expression
+              (assign_expr
+                (op2_expr
+                  (or_expr
+                    (and_expr
+                      (cmp_expr
+                        (range_expr
+                          (amp_expr
+                            (add_expr
+                              (mul_expr
+                                (pow_expr
+                                  (prefix_expr
+                                    (postfix_expr
+                                      (postfixable_primary
+                                        (literal
+                                          (integer_literal))))))))))))))))))
+        (inline_stmt_list
+          (simple_stmt
+            (expr_stmt
+              (expression
+                (command_expr
+                  (postfix_expr
+                    (postfixable_primary
+                      (symbol
+                        (identifier))))
+                  (command_first_arg
+                    (infix_expression
+                      (assign_expr
+                        (op2_expr
+                          (or_expr
+                            (and_expr
+                              (cmp_expr
+                                (range_expr
+                                  (amp_expr
+                                    (add_expr
+                                      (mul_expr
+                                        (pow_expr
+                                          (prefix_expr
+                                            (postfix_expr
+                                              (postfixable_primary
+                                                (literal
+                                                  (integer_literal)))))))))))))))))))))))
+      (elif_branch
+        (expression
+          (infix_expression
+            (assign_expr
+              (op2_expr
+                (or_expr
+                  (and_expr
+                    (cmp_expr
+                      (range_expr
+                        (amp_expr
+                          (add_expr
+                            (mul_expr
+                              (pow_expr
+                                (prefix_expr
+                                  (postfix_expr
+                                    (postfixable_primary
+                                      (symbol
+                                        (identifier))))))))))
+                      (cmp_operator)
+                      (range_expr
+                        (amp_expr
+                          (add_expr
+                            (mul_expr
+                              (pow_expr
+                                (prefix_expr
+                                  (postfix_expr
+                                    (postfixable_primary
+                                      (literal
+                                        (integer_literal)))))))))))))))))
+        (inline_stmt_list
+          (simple_stmt
+            (expr_stmt
+              (expression
+                (command_expr
+                  (postfix_expr
+                    (postfixable_primary
+                      (symbol
+                        (identifier))))
+                  (command_first_arg
+                    (infix_expression
+                      (assign_expr
+                        (op2_expr
+                          (or_expr
+                            (and_expr
+                              (cmp_expr
+                                (range_expr
+                                  (amp_expr
+                                    (add_expr
+                                      (mul_expr
+                                        (pow_expr
+                                          (prefix_expr
+                                            (postfix_expr
+                                              (postfixable_primary
+                                                (literal
+                                                  (integer_literal)))))))))))))))))))))))
+      (else_branch
+        (inline_stmt_list
+          (simple_stmt
+            (discard_stmt)))))))
